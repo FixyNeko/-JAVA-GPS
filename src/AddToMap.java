@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,10 @@ public class AddToMap {
 	}
 
 	public static String[] getConnectedPointsTo() {
-		String[] tableau = (String[]) pointsConnectes.toArray();
+		String[] tableau = new String[pointsConnectes.size()];
+		for (int i = 0; i < pointsConnectes.size(); i++) {
+			tableau[i] = pointsConnectes.get(i).toString();
+		}
 		return tableau; //on retourne le tableau
 	}
 
@@ -38,7 +40,7 @@ public class AddToMap {
 		//Array.getInt(array, index);
 		int[] tableau = new int[poidsLiaisons.size()];
 		for (int i = 0; i < poidsLiaisons.size(); i++) {
-			tableau[i] = Array.getInt(poidsLiaisons, i);
+			tableau[i] = poidsLiaisons.get(i);
 		}
 		return tableau;
 	}
