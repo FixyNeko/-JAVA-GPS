@@ -21,9 +21,9 @@ public class Algorythme {
 		do {
 			System.out.println("Testé: " + x);
 			pointsDejaFaits.add(x); //on ajoute le point à la liste des points deja testés
-			addToMap.calcLiaisons(x); //on lance le calcul des points reliés
-			String[] pointsConnectes = addToMap.getConnectedPointsTo(); //on recupère le nom des points reliés
-			int[] poidsLiaisons = addToMap.getPoidsLiaisonTo(); //et leur distance du point x
+			AddToMap.calcLiaisons(x); //on lance le calcul des points reliés
+			String[] pointsConnectes = AddToMap.getConnectedPointsTo(); //on recupère le nom des points reliés
+			int[] poidsLiaisons = AddToMap.getPoidsLiaisonTo(); //et leur distance du point x
 			for (int i = 0; i < poidsLiaisons.length; i++) { //on ajoute le poids de x, pour avoir leur poids total par rapport au tout premier point
 				poidsLiaisons[i] = poidsLiaisons[i] + y;
 			}
@@ -59,22 +59,22 @@ public class Algorythme {
 		} while (!x.equals(pointArrivee)); //on boucle tant que le point selectionné n'est pas celui de fin
 		
 		List<String> cheminInverse = new ArrayList<String>();
-		while(!x.equals(pointDepart)) { //on recherche le chemin
-			cheminInverse.add(x);
+		while(!x.equals(pointDepart)) { //on recherche le chemin (cette liste est inversée, on remonte les données jusqu'à la source)
+			cheminInverse.add(x); //on ajoute le point au chemin
 			String trouve = null;
 			for (int i = 0; i < historiqueSelectionne.size(); i++) {
 				if (historiqueSelectionne.get(i).getPoint().equals(x)) {
-					trouve = historiqueSelectionne.get(i).getPointPrecedent();
+					trouve = historiqueSelectionne.get(i).getPointPrecedent(); //on note le point précédent au point recherché
 				}
 			}
-			x = trouve;
+			x = trouve; //on remonte la source, nouveau x = le point precedent de l'ancien x
 		}
-		cheminInverse.add(x);
-		String[] chemin = new String[cheminInverse.size()];
+		cheminInverse.add(x); //on ajoute le dernier point (non ajouté par la boucle au dessus)
+		String[] chemin = new String[cheminInverse.size()]; //on crée la variable finale
 		
-		for (int i = 0; i < cheminInverse.size(); i++)
+		for (int i = 0; i < cheminInverse.size(); i++) //on inverse toutes les lettres (fin au début, début à la fin)
 			chemin[i] = cheminInverse.get(cheminInverse.size() - 1 - i);
-		for (int i = 0; i < chemin.length; i++)
+		for (int i = 0; i < chemin.length; i++) //on affiche PPCM (plus petit chemin) trouvé dans la console
 			System.out.print(chemin[i] + " ");
 	}
 
