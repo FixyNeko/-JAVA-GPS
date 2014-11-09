@@ -3,51 +3,44 @@ import java.util.List;
 
 public class addToMap {
 
-	private static String liaisons1[] = { "A", "A", "B", "C", "C", "D" };
-	private static String liaisons2[] = { "B", "C", "C", "D", "E", "E" };
-	private static int poids[] = { 3, 8, 10, 7, 5, 10 };
+	private static List<String> pointsConnectes = new ArrayList<String>(); //liste dynamique, on peut faire varier sa taille
+	private static List<Integer> poidsLiaisons = new ArrayList<Integer>();
 
-	private static List<String> pointsConnectes = new ArrayList<String>();
-	private static List<Number> poidsConnections = new ArrayList<Number>();
-
-	public static int dim() {
-		return poids.length;
-	}
-
-	public static String addLiaison1(int i) {
-		return liaisons1[i];
-	}
-
-	public static String addLiaison2(int i) {
-		return liaisons2[i];
-	}
-
-	public static int addPoids(int i) {
-		return poids[i];
-	}
+	static Liaison liaison[] = { new Liaison("A", "B", 3),
+			new Liaison("A", "C", 8), new Liaison("B", "C", 10),
+			new Liaison("C", "D", 7), new Liaison("C", "E", 5),
+			new Liaison("D", "E", 10) }; //tableau de type Liaison contenant les liaisons, le numero de la case caracterise le nom de l'objet Liaison
 
 	public static void calcLiaisons(String point) {
-		pointsConnectes.clear();
-		poidsConnections.clear();
-		for (int i = 0; i < liaisons1.length; i++) {
-			if (liaisons1[i].equals(point)) {
-				pointsConnectes.add(liaisons2[i]);
-				poidsConnections.add(poids[i]);
+		pointsConnectes.clear(); //on vide la liste, pour ne pas avoir d'anciens points residuels
+		poidsLiaisons.clear();
+		for (int i = 0; i < liaison.length; i++) { //on teste le point 1 de toutes les variables Liaison du tableau
+			if (liaison[i].getPoint1().equals(point)) { //si le point est celui entré en paramètre
+				pointsConnectes.add(liaison[i].getPoint2()); //on ajoute le point 2 de la variable Liaison
+				poidsLiaisons.add(liaison[i].getPoids()); //on ajoute le poids de la variable Liaison
 			}
 		}
-		for (int i = 0; i < liaisons2.length; i++) {
-			if (liaisons2[i].equals(point)) {
-				pointsConnectes.add(liaisons1[i]);
-				poidsConnections.add(poids[i]);
+		for (int i = 0; i < liaison.length; i++) { //on recommence en inversant les points 1 et 2 (comme ça on définit une seule liaison qui fait 2 sens, au lieu de 2 qui font un sens chacune)
+			if (liaison[i].getPoint2().equals(point)) {
+				pointsConnectes.add(liaison[i].getPoint1());
+				poidsLiaisons.add(liaison[i].getPoids());
 			}
 		}
 	}
 
-	public static List<String> getConnectedPointsTo() {
-		return pointsConnectes;
+	public static String[] getConnectedPointsTo() {
+		int size = pointsConnectes.size();
+		String tableau[] = new String[size];
+		for (int i = 0; i < size; i++) //on convertit la variable de type List en tableau de type String[]
+			tableau[i] = pointsConnectes.get(i);
+		return tableau; //on retourne le tableau
 	}
 
-	public static List<Number> getPoidsLiaisonTo() {
-		return poidsConnections;
+	public static int[] getPoidsLiaisonTo() {
+		int size = poidsLiaisons.size();
+		int tableau[] = new int[size];
+		for (int i = 0; i < size; i++)//on convertit la variable de type List en tableau de type int[]
+			tableau[i] = poidsLiaisons.get(i);
+		return tableau;
 	}
 }
