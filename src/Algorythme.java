@@ -4,85 +4,85 @@ import java.util.Scanner;
 
 public class Algorythme {
 
-	static List<Historique> historique = new ArrayList<Historique>(),//liste qui va contenir tous les points en attente d'être testés
-			historiqueSelectionne = new ArrayList<Historique>();//liste qui va contenir tous les points selectionnes, d'où ils viennent, leur poids total
-	static List<String> pointsDejaFaits = new ArrayList<String>();//liste qui va contenir le nom des points qu'on a déja testés
+	static List<Liaison> Liaison = new ArrayList<Liaison>(),//liste qui va contenir tous les points en attente d'ï¿½tre testï¿½s
+			LiaisonSelectionne = new ArrayList<Liaison>();//liste qui va contenir tous les points selectionnes, d'oï¿½ ils viennent, leur poids total
+	static List<String> pointsDejaFaits = new ArrayList<String>();//liste qui va contenir le nom des points qu'on a dï¿½ja testï¿½s
 
 	public static void main(String[] args) {
 		String x, z = null, pointArrivee, pointDepart;
 		int y = 0, plusPetit;
 
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Entrer le point de départ:");
+		System.out.println("Entrer le point de dï¿½part:");
 		pointDepart = sc.next();
-		System.out.println("Entrer le point d'arrivée:");
+		System.out.println("Entrer le point d'arrivï¿½e:");
 		pointArrivee = sc.next();
 		x = pointDepart;
 		do {
-			System.out.println("Testé: " + x);
-			pointsDejaFaits.add(x); //on ajoute le point à la liste des points deja testés
-			AddToMap.calcLiaisons(x); //on lance le calcul des points reliés
-			String[] pointsConnectes = AddToMap.getConnectedPointsTo(); //on recupère le nom des points reliés
+			System.out.println("Testï¿½: " + x);
+			pointsDejaFaits.add(x); //on ajoute le point ï¿½ la liste des points deja testï¿½s
+			AddToMap.calcLiaisons(x); //on lance le calcul des points reliï¿½s
+			String[] pointsConnectes = AddToMap.getConnectedPointsTo(); //on recupï¿½re le nom des points reliï¿½s
 			int[] poidsLiaisons = AddToMap.getPoidsLiaisonTo(); //et leur distance du point x
 			for (int i = 0; i < poidsLiaisons.length; i++) { //on ajoute le poids de x, pour avoir leur poids total par rapport au tout premier point
 				poidsLiaisons[i] = poidsLiaisons[i] + y;
 			}
-			for (int i = 0; i < pointsConnectes.length; i++) { //pour le nombre de points connectés à x
+			for (int i = 0; i < pointsConnectes.length; i++) { //pour le nombre de points connectï¿½s ï¿½ x
 				boolean found = false;
-				for (int j = 0; j < historique.size(); j++) { //on compare à chacun des points en attente de traitement
-					if (historique.get(j).getPoint().equals(pointsConnectes[i])) { //si le point est le même
-						found = true; //le point est déjà dans la liste
-						if (historique.get(j).getPoids() > poidsLiaisons[i]) //si le nouveau point présente un chemin plus court
-							historique.set(j, new Historique(
-									pointsConnectes[i], x, poidsLiaisons[i])); //on remplace d'où il vient et le poids total par les nouveaux trouvés
+				for (int j = 0; j < Liaison.size(); j++) { //on compare ï¿½ chacun des points en attente de traitement
+					if (Liaison.get(j).getPoint1().equals(pointsConnectes[i])) { //si le point est le mï¿½me
+						found = true; //le point est dï¿½jï¿½ dans la liste
+						if (Liaison.get(j).getPoids() > poidsLiaisons[i]) //si le nouveau point prï¿½sente un chemin plus court
+							Liaison.set(j, new Liaison(
+									pointsConnectes[i], x, poidsLiaisons[i])); //on remplace d'oï¿½ il vient et le poids total par les nouveaux trouvï¿½s
 					}
 				}
-				if (!found) //si le point est pas déjà dans la liste
-					historique.add(new Historique(pointsConnectes[i], x,
+				if (!found) //si le point est pas dï¿½jï¿½ dans la liste
+					Liaison.add(new Liaison(pointsConnectes[i], x,
 							poidsLiaisons[i])); //on le rajoute
 			}
 			
-			do { //on cherche le points le moins loin du tout premier point dans la liste de points à traiter
-				plusPetit = 0; //par défault, le premier numero de la liste
-				for (int i = 0; i < historique.size(); i++) { //on teste tous les point à traiter un par un
-					if (historique.get(plusPetit).getPoids() > historique
+			do { //on cherche le points le moins loin du tout premier point dans la liste de points ï¿½ traiter
+				plusPetit = 0; //par dï¿½fault, le premier numero de la liste
+				for (int i = 0; i < Liaison.size(); i++) { //on teste tous les point ï¿½ traiter un par un
+					if (Liaison.get(plusPetit).getPoids() > Liaison
 							.get(i).getPoids()) //si on en trouve un plus Petit
 						plusPetit = i; //on stocke son numero
 				}
-			} while (testDejaFait(plusPetit)); //on appelle la fonction testDejaFait, et on lui envoie le numero trouvé. Si déja fait, on boucle
+			} while (testDejaFait(plusPetit)); //on appelle la fonction testDejaFait, et on lui envoie le numero trouvï¿½. Si dï¿½ja fait, on boucle
 
-			x = historique.get(plusPetit).getPoint(); //on stocke les paramètres du nouveau point
-			z = historique.get(plusPetit).getPointPrecedent();
-			y = historique.get(plusPetit).getPoids();
+			x = Liaison.get(plusPetit).getPoint1(); //on stocke les paramï¿½tres du nouveau point
+			z = Liaison.get(plusPetit).getPoint2();
+			y = Liaison.get(plusPetit).getPoids();
 
-			historiqueSelectionne.add(new Historique(x, z, y)); //on ajoute le point à l'historique des selectionnés
-		} while (!x.equals(pointArrivee)); //on boucle tant que le point selectionné n'est pas celui de fin
+			LiaisonSelectionne.add(new Liaison(x, z, y)); //on ajoute le point ï¿½ l'Liaison des selectionnï¿½s
+		} while (!x.equals(pointArrivee)); //on boucle tant que le point selectionnï¿½ n'est pas celui de fin
 		
 		List<String> cheminInverse = new ArrayList<String>();
-		while(!x.equals(pointDepart)) { //on recherche le chemin (cette liste est inversée, on remonte les données jusqu'à la source)
+		while(!x.equals(pointDepart)) { //on recherche le chemin (cette liste est inversï¿½e, on remonte les donnï¿½es jusqu'ï¿½ la source)
 			cheminInverse.add(x); //on ajoute le point au chemin
 			String trouve = null;
-			for (int i = 0; i < historiqueSelectionne.size(); i++) {
-				if (historiqueSelectionne.get(i).getPoint().equals(x)) {
-					trouve = historiqueSelectionne.get(i).getPointPrecedent(); //on note le point précédent au point recherché
+			for (int i = 0; i < LiaisonSelectionne.size(); i++) {
+				if (LiaisonSelectionne.get(i).getPoint1().equals(x)) {
+					trouve = LiaisonSelectionne.get(i).getPoint2(); //on note le point prï¿½cï¿½dent au point recherchï¿½
 				}
 			}
 			x = trouve; //on remonte la source, nouveau x = le point precedent de l'ancien x
 		}
-		cheminInverse.add(x); //on ajoute le dernier point (non ajouté par la boucle au dessus)
-		String[] chemin = new String[cheminInverse.size()]; //on crée la variable finale
+		cheminInverse.add(x); //on ajoute le dernier point (non ajoutï¿½ par la boucle au dessus)
+		String[] chemin = new String[cheminInverse.size()]; //on crï¿½e la variable finale
 		
-		for (int i = 0; i < cheminInverse.size(); i++) //on inverse toutes les lettres (fin au début, début à la fin)
+		for (int i = 0; i < cheminInverse.size(); i++) //on inverse toutes les lettres (fin au dï¿½but, dï¿½but ï¿½ la fin)
 			chemin[i] = cheminInverse.get(cheminInverse.size() - 1 - i);
-		for (int i = 0; i < chemin.length; i++) //on affiche PPCM (plus petit chemin) trouvé dans la console
+		for (int i = 0; i < chemin.length; i++) //on affiche PPCM (plus petit chemin) trouvï¿½ dans la console
 			System.out.print(chemin[i] + " ");
 	}
 
 	public static boolean testDejaFait(int plusPetit) {
 		boolean retour = false;
-		if (pointsDejaFaits.contains(historique.get(plusPetit).getPoint())) { //si le point se trouve dans la liste des déja faits
-			historique.remove(plusPetit); //on le supprime de la liste
-			retour = true; //le point était déja fait
+		if (pointsDejaFaits.contains(Liaison.get(plusPetit).getPoint1())) { //si le point se trouve dans la liste des dï¿½ja faits
+			Liaison.remove(plusPetit); //on le supprime de la liste
+			retour = true; //le point ï¿½tait dï¿½ja fait
 			;
 		}
 		return retour;
