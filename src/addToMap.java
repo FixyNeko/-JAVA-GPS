@@ -8,8 +8,8 @@ public class addToMap {
 
 	static Liaison liaison[] = { new Liaison("A", "B", 3),
 			new Liaison("A", "C", 8), new Liaison("B", "C", 10),
-			new Liaison("C", "D", 7), new Liaison("C", "E", 5),
-			new Liaison("D", "E", 10) }; //tableau de type Liaison contenant les liaisons, le numero de la case caracterise le nom de l'objet Liaison
+			new Liaison("C", "D", 4), new Liaison("C", "E", 5),
+			new Liaison("D", "E", 10), new Liaison("B", "D", 4) }; //tableau de type Liaison contenant les liaisons, le numero de la case caracterise le nom de l'objet Liaison
 
 	public static void calcLiaisons(String point) {
 		pointsConnectes.clear(); //on vide la liste, pour ne pas avoir d'anciens points residuels

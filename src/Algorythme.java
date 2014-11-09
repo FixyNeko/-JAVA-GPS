@@ -9,14 +9,15 @@ public class Algorythme {
 	static List<String> pointsDejaFaits = new ArrayList<String>();//liste qui va contenir le nom des points qu'on a déja testés
 
 	public static void main(String[] args) {
-		String x, z = null, pointArrivee;
+		String x, z = null, pointArrivee, pointDepart;
 		int y = 0, plusPetit;
 
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Entrer le point de départ:");
-		x = sc.next();
+		pointDepart = sc.next();
 		System.out.println("Entrer le point d'arrivée:");
 		pointArrivee = sc.next();
+		x = pointDepart;
 		do {
 			System.out.println("Testé: " + x);
 			pointsDejaFaits.add(x); //on ajoute le point à la liste des points deja testés
@@ -40,7 +41,6 @@ public class Algorythme {
 					historique.add(new Historique(pointsConnectes[i], x,
 							poidsLiaisons[i])); //on le rajoute
 			}
-
 			do { //on cherche le points le moins loin du tout premier point dans la liste de points à traiter
 				plusPetit = 0; //par défault, le premier numero de la liste
 				for (int i = 0; i < historique.size(); i++) { //on teste tous les point à traiter un par un
@@ -59,7 +59,35 @@ public class Algorythme {
 			System.out.println("Deja faits: " + pointsDejaFaits);
 
 		} while (!x.equals(pointArrivee)); //on boucle tant que le point selectionné n'est pas celui de fin
-
+		
+		for (int i = 0; i < historiqueSelectionne.size(); i++) {
+			System.out.println(historiqueSelectionne.get(i).getPoint() + " " + historiqueSelectionne.get(i).getPointPrecedent() + " " + historiqueSelectionne.get(i).getPoids());
+		}
+		
+		List<String> cheminInverse = new ArrayList<String>();
+		while(!x.equals(pointDepart)) { //on recherche le chemin
+			System.out.println("Chemin X: " + x);
+			cheminInverse.add(x);
+			String trouve = null;
+			for (int i = 0; i < historiqueSelectionne.size(); i++) {
+				System.out.println("Teste: " + historiqueSelectionne.get(i).getPoint() + " et x = " + x);
+				if (historiqueSelectionne.get(i).getPoint().equals(x)) {
+					trouve = historiqueSelectionne.get(i).getPointPrecedent();
+				}
+			}
+			x = trouve;
+		}
+		cheminInverse.add(x);
+		System.out.println(cheminInverse);
+		String[] chemin = new String[cheminInverse.size()];
+		
+		for (int i = 0; i < cheminInverse.size(); i++) {
+			System.out.println(cheminInverse.get(cheminInverse.size() - 1 - i));
+			chemin[i] = cheminInverse.get(cheminInverse.size() - 1 - i);
+		}
+		for (int i = 0; i < chemin.length; i++) {
+			System.out.print(chemin[i] + " ");
+		}
 	}
 
 	public static boolean testDejaFait(int plusPetit) {
